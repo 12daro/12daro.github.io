@@ -268,6 +268,7 @@ MatchTimer.setDeleteButtonState = function() {
 
     
     if(isactive && !this.data.match[match].isRunning) {
+        // DELETE MATCH
         var button = $(".controls .delete")
 
         $(button).removeClass("inactive");
@@ -278,6 +279,7 @@ MatchTimer.setDeleteButtonState = function() {
   
         });
 
+        // EMAIL MATCH
         var button = $(".controls .email")
         
         $(button).removeClass("inactive");
@@ -290,6 +292,49 @@ MatchTimer.setDeleteButtonState = function() {
             $(".emailscreen .email").val("");
         });
 
+        // DOWNLOAD MATCH
+        var button = $(".controls .download")
+        $(button).removeClass("inactive");
+        $(button).off( "click" );
+        $(button).click(function() {
+            var match = MatchTimer.data.match[MatchTimer.data.currentMatch];
+
+            if(match.events.length > 0) {
+            
+                var team1 = match.team1.name;
+                var team2 = match.team2.name;
+                var date = match.date;
+                var events = "";
+
+                var subject = date + ": " + team1 + " vs " + team2;
+                var body = "<h1>" + team1 + " " + match.team1.points + ":" + match.team2.points + " " + team2 + "\n</h1>";
+
+                body += "<h2>" + date + "</h2>"
+                body += "<table>";
+
+                for(var key in match.events) {
+                    var event = match.events[key];
+
+                    body += "<tr>"
+                    body += "<td>" + event.timerTime + "</td><td>" + event.description + "</td><td>" + event.actualTime + "</td>"
+                    body += "</tr>"
+                }
+
+                body += "</table>"
+            
+                var html = '<html>';
+                html += '<head><meta charset="utf-8"><title>' + subject + '</title></head>';
+                html += '<body>' + body + '</body>';
+                html += '</html>';
+
+                download(html, date + " " + team1 + " vs " + team2 + '.html', 'text/html')
+
+
+                //download(JSON.stringify(MatchTimer.data.match[MatchTimer.data.currentMatch]), "match.txt", "text/plain");
+            }
+
+            
+        });
     }
     else {
         $(button).addClass("inactive");
