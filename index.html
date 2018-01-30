@@ -102,10 +102,9 @@
             <form>
                 <label>Kara</label><select class="cardtype">
                   <option disabled selected></option>
-                  <option>2 min</option>
-                  <option>5 min</option>
-                  <option>10 min</option>
-                  <option>Meczu</option>
+                  <option>Żółta kartka</option>
+                  <option>Czerwona kartka</option>
+                  <option>Kara 10 min</option>
                 </select>
               <label>Drużyna</label><select class="cardteam"><option disabled selected></option></select>
               <label>Gracz</label><select class="cardplayer"><option disabled selected></option></select>
@@ -113,6 +112,7 @@
           </div>
           <button class="addcard green">OK</button>
         </div>
+
 
         <!-- Send email -->
         <div class="screen emailscreen disabled">
@@ -214,6 +214,13 @@
               <!--</a>-->
               </button>
 
+              <button class="download inactive">
+                <svg style="width:72px;height:72px" fill="#ffffff" height="72" viewBox="0 0 24 24" width="72" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                  <path d="M0 0h24v24H0z" fill="none"/>
+              </svg>
+              </button>
+
 
               <button class="delete inactive">
                   <svg style="width:72px;height:72px" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -231,6 +238,7 @@
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/smtp.js"></script>
+    <script src="js/download.js"></script>
     <script src="js/app.js"></script>
     <script src="js/referee.js"></script>
   </body>
