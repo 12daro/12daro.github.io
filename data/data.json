@@ -54,18 +54,21 @@
             "INNY",
             "SAMOBÓJ"
         ],
-        "REAL": [
-            "Jacek Bałtyn",
-            "Damian Fabisiak",
-            "Łukasz Kierzkowski",
-            "Przemek Kilanowki",
-            "Sebastian Kloc",
-            "Piotr Olejnik",
-            "Mikołaj Piwowarski",
-            "Maciej Sobczyk",
-            "Krystian Szkiela",
-            "Adam Tokarski",
-            "Dariusz Tokarski",
+        "JAREX": [
+            "Kamil Bucholc",
+            "Marcin Kacprzak",
+            "Damian Karpiński",
+            "Mariusz Kita",
+            "Dominik Knap",
+            "Gabriel Kobacki",
+            "Hubert Koms",
+            "Paweł Kruk",
+            "Oskar Kurowski",
+            "Piotr Orman",
+            "Łukasz Ponder",
+            "Kacper Sandwicki",
+            "Adam Trojan",
+            "Piotr Wojtasik",
             "INNY",
             "SAMOBÓJ"
         ],
@@ -124,7 +127,23 @@
             "INNY",
             "SAMOBÓJ"
         ],
-       "JAREX": [
+       "REAL": [
+            "Bałtyn Jacek",
+            "Gajewski Piotr",
+            "Godlewski Paweł",
+            "Kierzkowski Łukasz",
+            "Kloc Sebastian",
+            "Olejnik Piotr",
+            "Piwowarski Mikołaj",
+            "Sobczyk Maciej",
+            "Szkiela Krystian",
+            "Tokarski Adam",
+            "Tokarski Dariusz",
+            "zalewski Kamil:,
+            "INNY",
+            "SAMOBÓJ"
+        ],
+        "JAREX": [
             "Kamil Bucholc",
             "Marcin Kacprzak",
             "Damian Karpiński",
