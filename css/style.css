@@ -99,6 +99,28 @@ label {
   font-size: 18px;
 }
 
+.screen button.red {
+  padding-top: 20px;
+  background-color: #ff5f5f;
+  color: #fff;
+  font-size: 18px;
+}
+
+.matchnotes {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  resize: none;
+  width: 100%;
+  background-color: #fccb02;
+  border: 0;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  padding: 8px;
+  outline-color: transparent;
+  outline-style: none;
+}
+
 button,
 select,
 input,
@@ -292,6 +314,10 @@ label.emaillist {
   color: #fff;
 }
 
+button.deletegoal,
+button.deletecard,
+button.confirmgoaldelete,
+button.confirmcarddelete,
 button.confirmdelete,
 .controls button.delete {
   background-color: #ff5f5f;
