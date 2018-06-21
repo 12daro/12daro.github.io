@@ -107,10 +107,30 @@ MatchTimer.init = function() {
 
       $(".goalscreen .title .return").click(function() {
         MatchTimer.showScreen("gameplayscreen");
+
+        $(".goalscreen select.goalteam").val('').change();
+        $(".goalscreen select.goalplayer").val('').change();
+        MatchTimer.editEvent = false;
       });
+
+      $(".goalscreen .deletegoal").click(function() {
+        //MatchTimer.deleteGoal();
+        MatchTimer.showScreen('confirmgoaldeletescreen');
+      });
+
 
       $(".cardscreen .title .return").click(function() {
         MatchTimer.showScreen("gameplayscreen");
+
+        $(".cardscreen select.cardtype").val('').change();
+        $(".cardscreen select.cardteam").val('').change();
+        $(".cardscreen select.cardplayer").val('').change();
+        MatchTimer.editEvent = false;
+      });
+
+      $(".cardscreen .deletecard").click(function() {
+        //MatchTimer.deleteCard();
+        MatchTimer.showScreen('confirmcarddeletescreen');
       });
 
       $(".emailscreen .title .return").click(function() {
@@ -119,6 +139,14 @@ MatchTimer.init = function() {
 
       $(".confirmdeletescreen .title .return").click(function() {
         MatchTimer.showScreen("gameplayscreen");
+      });
+
+      $(".confirmgoaldeletescreen .title .return").click(function() {
+        MatchTimer.showScreen("goalscreen");
+      });
+
+      $(".confirmcarddeletescreen .title .return").click(function() {
+        MatchTimer.showScreen("cardscreen");
       });
 
 
@@ -135,6 +163,22 @@ MatchTimer.init = function() {
 
         MatchTimer.setDeleteButtonState();
       });
+
+      $(".confirmgoaldeletescreen .confirmgoaldelete").click(function() {
+        MatchTimer.deleteGoal();
+      });
+
+      $(".confirmcarddeletescreen .confirmcarddelete").click(function() {
+        MatchTimer.deleteCard();
+      });
+
+    
+
+    $(".matchnotes").on("change keyup paste", function() {
+        var match = MatchTimer.data.currentMatch;
+
+        MatchTimer.data.match[match].notes = $(this).val();
+    });
 
 
     $("button.newmatch").click(function() {
@@ -188,6 +232,7 @@ MatchTimer.addMatch = function(team1, team2) {
             timerTime: 0,
             renderedTime: null,
             isRunning: false,
+            notes: 'Uwagi:\n',
             team1: {
                 name: team1,
                 points: 0
@@ -266,7 +311,6 @@ MatchTimer.setDeleteButtonState = function() {
 
     var isactive = this.data.match[match].events.length > 0;
 
-    
     if(isactive && !this.data.match[match].isRunning) {
         // DELETE MATCH
         var button = $(".controls .delete")
@@ -322,6 +366,8 @@ MatchTimer.setDeleteButtonState = function() {
 
                 body += "</table>"
             
+                body += "<pre>"+ match.notes + "</pre>"
+
                 var html = '<html>';
                 html += '<head><meta charset="utf-8"><title>' + subject + '</title></head>';
                 html += '<body>' + body + '</body>';
@@ -364,7 +410,7 @@ MatchTimer.setMatch = function(key) {
 
     MatchTimer.setDeleteButtonState();
 
-
+    $(".matchnotes").val(this.data.match[key].notes);
 
     // goal selects
     $(".goalscreen select.goalteam").empty();
@@ -456,6 +502,7 @@ MatchTimer.setMatch = function(key) {
 
 
 MatchTimer.addGoal = function() {
+
     var team = $(".goalscreen select.goalteam").val();
     var player = $(".goalscreen select.goalplayer").val();
 
@@ -481,35 +528,46 @@ MatchTimer.addGoal = function() {
     }
 */
     
+    // Edytuj
+    if(MatchTimer.editEvent == true) {
 
-    var addEvent = false;
+/*
+        if(MatchTimer.data.match[MatchTimer.data.currentMatch].events[MatchTimer.eventId].val1 != team) {
+            if(teamNo == 1) {
+                MatchTimer.data.match[MatchTimer.data.currentMatch].team1.points += 1;
+                MatchTimer.data.match[MatchTimer.data.currentMatch].team2.points -= 1;
+            }
+            else if(teamNo == 2) {
+                MatchTimer.data.match[MatchTimer.data.currentMatch].team2.points += 1;
+                MatchTimer.data.match[MatchTimer.data.currentMatch].team1.points -= 1;
+            }
+        }*/
 
-    if(player == "SAMOBÓJ") {
-        var opponentPlayer = $(".goalscreen select.opponentPlayer").val();
+        
 
-        if(opponentPlayer !== null) {
-            MatchTimer.addEvent("goal", "Gol " + team + " (" + player + " " + opponentPlayer + ")");
+        
 
+        if(player == "SAMOBÓJ") {
+            var opponentPlayer = $(".goalscreen select.opponentPlayer").val();
+    
+            if(opponentPlayer !== null) {
+                MatchTimer.addEvent("goal", "Gol " + team + " (" + player + " " + opponentPlayer + ")", team, player);
+    
+                addEvent = true;
+            }
+        }
+        else {
+            MatchTimer.addEvent("goal", "Gol " + team + " (" + player + ")", team, player);
+    
             addEvent = true;
         }
-    }
-    else {
-        MatchTimer.addEvent("goal", "Gol " + team + " (" + player + ")");
-
-        addEvent = true;
-    }
 
 
-    if(addEvent) {
-        if(teamNo == 1) {
-            MatchTimer.data.match[MatchTimer.data.currentMatch].team1.points += 1;
-        }
-        else if(teamNo == 2) {
-            MatchTimer.data.match[MatchTimer.data.currentMatch].team2.points += 1;
-        }
+        
+
 
         MatchTimer.refreshPointsView();
-        
+            
         MatchTimer.showScreen("gameplayscreen");
     
         $(".goalscreen .goalteam option:selected").removeAttr("selected");
@@ -521,8 +579,61 @@ MatchTimer.addGoal = function() {
         $(".goalscreen .opponentPlayer option:disabled").prop("selected", true);
 
         $(".goalscreen div.opponentPlayer").addClass("disabled");
-        
     }
+    // Dodaj
+    else {
+
+
+        var addEvent = false;
+
+        if(player == "SAMOBÓJ") {
+            var opponentPlayer = $(".goalscreen select.opponentPlayer").val();
+    
+            if(opponentPlayer !== null) {
+                MatchTimer.addEvent("goal", "Gol " + team + " (" + player + " " + opponentPlayer + ")", team, player);
+    
+                addEvent = true;
+            }
+        }
+        else {
+            MatchTimer.addEvent("goal", "Gol " + team + " (" + player + ")", team, player);
+    
+            addEvent = true;
+        }
+    
+    
+        if(addEvent) {
+            /*if(teamNo == 1) {
+                MatchTimer.data.match[MatchTimer.data.currentMatch].team1.points += 1;
+            }
+            else if(teamNo == 2) {
+                MatchTimer.data.match[MatchTimer.data.currentMatch].team2.points += 1;
+            }
+    */
+            MatchTimer.refreshPointsView();
+            
+            MatchTimer.showScreen("gameplayscreen");
+        
+            $(".goalscreen .goalteam option:selected").removeAttr("selected");
+            $(".goalscreen .goalplayer option:selected").removeAttr("selected");
+            $(".goalscreen .opponentPlayer option:selected").removeAttr("selected");
+        
+            $(".goalscreen .goalteam option:disabled").prop("selected", true);
+            $(".goalscreen .goalplayer option:disabled").prop("selected", true);
+            $(".goalscreen .opponentPlayer option:disabled").prop("selected", true);
+    
+            $(".goalscreen div.opponentPlayer").addClass("disabled");
+            
+        }
+        
+
+
+
+
+
+    }
+
+
     
     
 }
@@ -547,17 +658,37 @@ MatchTimer.addCard = function() {
         return false;
     }
 
-    MatchTimer.addEvent("card", type + " " + player + " (" + team + ")");
 
-    MatchTimer.showScreen("gameplayscreen");
+    if(MatchTimer.editEvent == true) {
+        // Edytuj
+        MatchTimer.addEvent("card", type + " " + player + " (" + team + ")", type, team, player);
 
-    $(".cardscreen .cardtype option:selected").removeAttr("selected");
-    $(".cardscreen .cardteam option:selected").removeAttr("selected");
-    $(".cardscreen .cardplayer option:selected").removeAttr("selected");
+        MatchTimer.showScreen("gameplayscreen");
 
-    $(".cardscreen .cardtype option:disabled").prop("selected", true);
-    $(".cardscreen .cardteam option:disabled").prop("selected", true);
-    $(".cardscreen .cardplayer option:disabled").prop("selected", true);
+        $(".cardscreen .cardtype option:selected").removeAttr("selected");
+        $(".cardscreen .cardteam option:selected").removeAttr("selected");
+        $(".cardscreen .cardplayer option:selected").removeAttr("selected");
+
+        $(".cardscreen .cardtype option:disabled").prop("selected", true);
+        $(".cardscreen .cardteam option:disabled").prop("selected", true);
+        $(".cardscreen .cardplayer option:disabled").prop("selected", true);
+    }
+    else {
+        // Dodaj
+        MatchTimer.addEvent("card", type + " " + player + " (" + team + ")", type, team, player);
+
+        MatchTimer.showScreen("gameplayscreen");
+
+        $(".cardscreen .cardtype option:selected").removeAttr("selected");
+        $(".cardscreen .cardteam option:selected").removeAttr("selected");
+        $(".cardscreen .cardplayer option:selected").removeAttr("selected");
+
+        $(".cardscreen .cardtype option:disabled").prop("selected", true);
+        $(".cardscreen .cardteam option:disabled").prop("selected", true);
+        $(".cardscreen .cardplayer option:disabled").prop("selected", true);
+
+    }
+    
 }
 
 
@@ -648,6 +779,7 @@ MatchTimer.reset = function() {
     $(".goal").click(function() {
         if(MatchTimer.data.match[MatchTimer.data.currentMatch].isRunning) {
 
+            $(".goalscreen .deletegoal").not(".disabled").addClass("disabled");
             MatchTimer.showScreen("goalscreen");
 
             /*MatchTimer.addEvent("goal", "Gol");*/
@@ -658,6 +790,7 @@ MatchTimer.reset = function() {
     $(".card").click(function() {
         if(MatchTimer.data.match[MatchTimer.data.currentMatch].isRunning) {
 
+            $(".cardscreen .deletecard").not(".disabled").addClass("disabled");
             MatchTimer.showScreen("cardscreen");
 
             //MatchTimer.addEvent("card", "Kartka");
@@ -768,6 +901,20 @@ MatchTimer.refreshTimerView = function() {
 
 MatchTimer.refreshPointsView = function() {
     var match = MatchTimer.data.match[MatchTimer.data.currentMatch];
+
+    match.team1.points = 0;
+    match.team2.points = 0;
+
+    for(var i in match.events) {
+        if(match.events[i].type == 'goal' && match.events[i].val1 == match.team1.name) {
+            match.team1.points += 1;
+        }
+        else if(match.events[i].type == 'goal' && match.events[i].val1 == match.team2.name) {
+            match.team2.points += 1;
+        }
+    }
+
+
     var result = match.team1.points + ":" + match.team2.points;
 
     $(".gameplayscreen .result.field div").text(result);
@@ -802,17 +949,33 @@ MatchTimer.getActualTime = function() {
 }
 
 
-MatchTimer.addEvent = function(type, description) {
+MatchTimer.addEvent = function(type, description, val1, val2, val3, val4) {
     var match = this.data.currentMatch;
 
     var event = {
         type: type,
         description: description,
         timerTime: this.data.match[match].renderedTime,
-        actualTime: this.getActualTime()
+        actualTime: this.getActualTime(),
+        val1: val1,
+        val2: val2,
+        val3: val3,
+        val4: val4
     };
 
-    this.data.match[match].events[this.data.match[match].events.length] = event;
+    if(MatchTimer.eventId > 0) {
+        event.timerTime = this.data.match[match].events[MatchTimer.eventId].timerTime;
+        event.actualTime = this.data.match[match].events[MatchTimer.eventId].actualTime;
+        this.data.match[match].events[MatchTimer.eventId] = event;
+    }
+    else {
+        this.data.match[match].events[this.data.match[match].events.length] = event;
+        
+    }
+
+    MatchTimer.eventId = null;
+    MatchTimer.editEvent = false;
+    
 
     //MatchTimer.addEventToList(event);
     MatchTimer.refreshEventsList();
@@ -833,7 +996,42 @@ MatchTimer.refreshEventsList = function() {
 
     for(var key in events) {
         var event = events[key];
-        $(".gameplayscreen .events").prepend('<div class="event"><div class="e_field_timer">' + event.timerTime + '</div><div class="e_field_description">' + event.description + ' (' + event.actualTime + ')</div></div>');
+        $(".gameplayscreen .events").prepend('<div id="event_' + key + '" class="event"><div class="e_field_timer">' + event.timerTime + '</div><div class="e_field_description">' + event.description + ' (' + event.actualTime + ')</div></div>');
+    
+        $("#event_" + key).click(function() {
+
+            var id = this.id.replace("event_", "");
+            var event = MatchTimer.data.match[MatchTimer.data.currentMatch].events[id];
+
+            if(event.type == 'goal') {
+                $(".goalscreen select.goalteam").val(event.val1).change();
+                $(".goalscreen select.goalplayer").val(event.val2).change();
+
+
+                MatchTimer.editEvent = true;
+                MatchTimer.eventId = id;
+                MatchTimer.prevVal1 = event.val1;
+                MatchTimer.prevVal2 = event.val2;
+
+                $(".goalscreen .deletegoal").removeClass("disabled");
+                MatchTimer.showScreen("goalscreen");
+            }
+
+            if(event.type == 'card') {
+                $(".cardscreen select.cardtype").val(event.val1).change();
+                $(".cardscreen select.cardteam").val(event.val2).change();
+                $(".cardscreen select.cardplayer").val(event.val3).change();
+
+                MatchTimer.editEvent = true;
+                MatchTimer.eventId = id;
+                MatchTimer.prevVal1 = event.val1;
+                MatchTimer.prevVal2 = event.val2;
+                MatchTimer.prevVal3 = event.val3;
+
+                $(".cardscreen .deletecard").removeClass("disabled");
+                MatchTimer.showScreen("cardscreen");
+            }
+        });
     }
 
 }
@@ -851,6 +1049,39 @@ MatchTimer.refreshEventsList = function() {
          this.addEventToList(this.data.match[match].events[i]);
      }
  }
+
+
+MatchTimer.deleteGoal = function() {
+    if(MatchTimer.editEvent == true && this.data.match[this.data.currentMatch].events[MatchTimer.eventId].type == 'goal') {
+        this.data.match[this.data.currentMatch].events.splice(MatchTimer.eventId, 1);
+        MatchTimer.refreshEventsList();
+        MatchTimer.refreshPointsView();
+        MatchTimer.showScreen('gameplayscreen');
+
+        $(".goalscreen select.goalteam").val('').change();
+        $(".goalscreen select.goalplayer").val('').change();
+        MatchTimer.editEvent = false; 
+    }
+};
+
+MatchTimer.deleteCard = function() {
+    if(MatchTimer.editEvent == true && this.data.match[this.data.currentMatch].events[MatchTimer.eventId].type == 'card') {
+        this.data.match[this.data.currentMatch].events.splice(MatchTimer.eventId, 1);
+        MatchTimer.refreshEventsList();
+        MatchTimer.showScreen('gameplayscreen');
+
+        $(".cardscreen select.cardtype").val('').change();
+        $(".cardscreen select.cardteam").val('').change();
+        $(".cardscreen select.cardplayer").val('').change();
+        MatchTimer.editEvent = false;
+    }
+    
+};
+
+
+
+
+
 
 /*
 MatchTimer.reset();*/
@@ -894,6 +1125,8 @@ MatchTimer.sendEmail = function() {
     }
 
     body += "</table>"
+
+    body += "<pre>"+ match.notes + "</pre>"
 
     $(".emailprogressscreen .loader").removeClass("disabled");
     $(".emailprogressscreen .error").not(".disabled").addClass("disabled");
