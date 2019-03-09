@@ -2,7 +2,7 @@
 importScripts('js/cache-polyfill.js');
 
 
-var version = '0.5018062101';
+var version = '0.5019030901';
 var cacheName = 'cache_' + version;
 var dataCacheName = 'cache_data_' + version;
 
@@ -10,7 +10,7 @@ var filesToCache = [
   'index.html',
   'js/app.js',
   'js/jquery.min.js',
-  'js/smtp.js',
+  'js/smtpv3.js',
   'js/referee.js',
   'css/style.css',
   'icon.png',
