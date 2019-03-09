@@ -1134,24 +1134,48 @@ MatchTimer.sendEmail = function() {
 
 
     //Email.handleUI = true;
-
+    
+    // v3
+    Email.send({
+        SecureToken : securityToken,
+        To : email,
+        From : senderEmail,
+        Subject : subject,
+        Body : body
+    });
+    
+    
+    // v2
+/*
     Email.send(senderEmail,
         email,
         subject,
         body,
         {
             token: securityToken
-        });
+        });*/
     
     //Email.handleUI = false;
     for(i in email_y) {
+        
+        // v3
+        Email.send({
+            SecureToken : securityToken,
+            To : email_y[i],
+            From : senderEmail,
+            Subject : subject,
+            Body : body
+        });
+        
+        // v2
+        /*
         Email.send(senderEmail,
             email_y[i],
             subject,
             body,
             {
                 token: securityToken
-            });
+            });*/
     }
 
     MatchTimer.showScreen("gameplayscreen");
