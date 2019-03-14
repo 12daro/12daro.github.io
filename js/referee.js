@@ -1135,17 +1135,17 @@ MatchTimer.sendEmail = function() {
 
     //Email.handleUI = true;
     
-    // v3
+    // email.js
     Email.send({
-        SecureToken : securityToken,
-        To : email,
-        From : senderEmail,
-        Subject : subject,
-        Body : body
+        to : email,
+        from : senderEmail,
+        fromName : "Karta sędziego",
+        subject : subject,
+        body : body
     });
     
     
-    // v2
+    // smtpjs
 /*
     Email.send(senderEmail,
         email,
@@ -1158,16 +1158,16 @@ MatchTimer.sendEmail = function() {
     //Email.handleUI = false;
     for(i in email_y) {
         
-        // v3
+        // email.js
         Email.send({
-            SecureToken : securityToken,
-            To : email_y[i],
-            From : senderEmail,
-            Subject : subject,
-            Body : body
+            to : email_y[i],
+            from : senderEmail,
+            fromName : "Karta sędziego",
+            subject : subject,
+            body : body
         });
         
-        // v2
+        // smtpjs
         /*
         Email.send(senderEmail,
             email_y[i],
